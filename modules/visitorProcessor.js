@@ -1,62 +1,98 @@
 "use scrict"
-const students = [];
+const visitors = []; // 1-n kioskEntries
+
+const kioskEntryIDs = []; // 1-n visits NOTE: An entry from the kiosk has visitor, kisok, visit, and center information.
+// A kioskEntryID is a contain for visits to a kiosk
+// When Constructed:
+// 1. If the visitor doesn't exist, add the visitor and link the kioskEntryID to the visitor
+
+const visits = []; // n-n kioskEntries and centers
+// A visit is create from a record from the Kiosk
+// When Constructed:
+// 1. If the center doesn't exist, add the center and link it to the visit
+// 2. If the KioskEntryID doesn't exist, add the kioskEntryID and link it to the visit
+
+const centers = []; // 1-n visits
+
+
 const courses = [];
 const enrollments = [];
 var st = {};
 var cs = {};
 var er = {};
 
+class Visit {
+    _id = '';
+    _center = '';
+    _kioskEntryID = '';
+    _name = '';
+    constructor(o) {
+        this._id = o 
+            ? o.id >= 0 
+                ? o.id 
+                : visit.length 
+            : visit.length;
+        this._center = getCenter(o)
+            ? getCenter(o)
+            : new Center(o);
+        this._kioskEntryID = getKioskEntryID(o)
+            ? getKioskEntryID(o)
+            : new KioskEntryID(o);
 
-Function.prototype.method = function (name, func) {
-    if (!this.prototype[name]) {
-        this.prototype[name] = func;
-        return this;
+        visit.push(this);
+    };
+
+    getCenter = function(o) {
+        return centers.filter((v) => v.id == o.center.id);
+    };
+
+    getKioskEntryID = function(o) {
+        return kioskEntryIDs.filter((v) => v.id == o.kiosk.id);
+    };
+
+    get id() {
+        return this._id;
+    };
+
+    get center() {
+        return this._center;
+    };
+
+    get kisoEntryID() {
+        return this._kioskEntryID;
+    };
+
+    set name(name) {
+        this._name = name;
+    };
+
+    get name() {
+        return this._name;
+    };
+
+    enrollCourse(c) {
+        let er = {course: c
+            , student: this
+        };
+        if (this.getClass(c).length == 0) {
+            new Enrollment(er);
+        };
     };
 };
 
-var myVisitor = function (o) {
-    let _pV = {
-        id: ''
-        , name: ''
-    };
-
-    function privateID_set(n) {
-        _pV.id = n;
-    };
-
-    function privateID_get() {
-        return _pV.id;
-    };
-
-    function privateName_set(n) {
-        _pV.name = n;
-    };
-
-    function privateName_get() {
-        return _pV.name;
-    };
-
-    return {
-        is: privateID_get()
-        ,name: privateName_get()
-    }
-};
-
-
-
-class Student {
+class Visitor {
     _name = '';
     _id = '';
     constructor(o) {
         this._id = o 
             ? o.id >= 0 
                 ? o.id 
-                : students.length 
-            : students.length;
+                : visitors.length 
+            : visitors.length;
         this._name = o 
             ? o.name 
             : 'Not Set';
-        students.push(this);
+        visitors.push(this);
     };
 
     get id() {
@@ -71,11 +107,15 @@ class Student {
         return this._name;
     };
 
-    getClasses() {
-        return enrollments.filter((v) => v.student.id == this.id);
+    getKioskEntryIDs() {
+        return kioskEntryIDs.filter((v) => v.visitor.id == this.id);
     };
 
-    getClass(o) {
+    getVisits(o) {
+        return this.visits.filter((v) => v.visits.id == this.id);
+    }
+
+    getVisit(o) {
         return this.getClasses().filter((v) => v.course.id == o.id);
     };
 
@@ -88,6 +128,107 @@ class Student {
         };
     };
 };
+
+class KioskEntryID {
+    _name = '';
+    _id = '';
+    constructor(o) {
+        this._id = o 
+            ? o.id >= 0 
+                ? o.id 
+                : kioskEntryIDs.length 
+            : kioskEntryIDs.length;
+        this._name = o 
+            ? o.name 
+            : 'Not Set';
+        kioskEntryIDs.push(this);
+    };
+
+    get id() {
+        return this._id;
+    };
+
+    set name(name) {
+        this._name = name;
+    };
+
+    get name() {
+        return this._name;
+    };
+
+    getVisitor() {
+        return visitors.filter((v) => v.visitor.id == this.id);
+    };
+
+
+    getVisits(o) {
+        return this.visits.filter((v) => v.visits.id == this.id);
+    }
+
+    getVisit(o) {
+        return this.getClasses().filter((v) => v.course.id == o.id);
+    };
+
+    enrollCourse(c) {
+        let er = {course: c
+            , student: this
+        };
+        if (this.getClass(c).length == 0) {
+            new Enrollment(er);
+        };
+    };
+};
+
+class Center {
+    _name = '';
+    _id = '';
+    constructor(o) {
+        this._id = o 
+            ? o.id >= 0 
+                ? o.id 
+                : centers.length 
+            : centers.length;
+        this._name = o 
+            ? o.name 
+            : 'Not Set';
+        centers.push(this);
+    };
+
+    get id() {
+        return this._id;
+    };
+
+    set name(name) {
+        this._name = name;
+    };
+
+    get name() {
+        return this._name;
+    };
+
+    getKioskEntries(o) {
+        return kioskEntries.filter((v) => v.center.id == this.id);
+    };
+
+
+    getVisits(o) {
+        return this.getKioskEntries(o).filter((v) => v.visits.id == o.id);
+    }
+
+    getVisit(o) {
+        return this.getClasses().filter((v) => v.course.id == o.id);
+    };
+
+    enrollCourse(c) {
+        let er = {course: c
+            , student: this
+        };
+        if (this.getClass(c).length == 0) {
+            new Enrollment(er);
+        };
+    };
+};
+
 
 class Course {
     _name = '';
@@ -227,7 +368,7 @@ gradeStudent = function(o) {
 let studentGrade = {
     cn: 'Math 101'
     , stn: 'Becky'
-    , grade: 'B'
+    , grade: 'A'
 };
 
 gradeStudent(studentGrade);
