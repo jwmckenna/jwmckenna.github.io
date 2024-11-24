@@ -30,38 +30,6 @@ Function.prototype.method = function (name, func) {
     };
 };
 
-var myStudent = function (o) {
-    let _pV = {
-        id: ''
-        , name: ''
-        , classList: {}
-    };
-
-    function privateID_set(n) {
-        _pV.id = n;
-    };
-
-    function privateID_get() {
-        return _pV.id;
-    };
-
-    function privateName_set(n) {
-        _pV.name = n;
-    };
-
-    function privateName_get() {
-        return _pV.name;
-    };
-
-    function privatClassList_set(o) {
-        _pV.classList[o.id] = o;
-    };
-
-    function privateClassList_get() {
-        return _pV.classList;
-    };
-};
-
 class Student {
     _name = '';
     _id = '';
@@ -75,6 +43,7 @@ class Student {
             ? o.name 
             : 'Not Set';
         students.push(this);
+        db.students[this.id] = this;
     };
 
     get id() {
@@ -120,6 +89,7 @@ class Course {
             ? o.name 
             : 'Not Set';
         courses.push(this);
+        db.courses[this.id] = this;
     };
 
     get id() {
@@ -167,6 +137,7 @@ class Enrollment {
         this._course = o.course || null;
         this._grade = o.grade ? o.grade : 'i';
         enrollments.push(this);
+        db.enrollments[this.id] = this;
     };
 
     get enrollment() {
