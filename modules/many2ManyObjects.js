@@ -52,10 +52,15 @@ class Student {
 
     set name(name) {
         this._name = name;
+        db.students[this.id].name = name;
     };
 
     get name() {
         return this._name;
+    };
+
+    get oName() {
+        return db.students[this.id].name;
     };
 
     getClasses() {
