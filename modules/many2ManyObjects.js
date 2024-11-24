@@ -205,8 +205,6 @@ er = courses[3].enrollStudent(students[6]); //11
 er = students[1].enrollCourse(courses[1]); // Don't Duplicate
 er = courses[1].enrollStudent(students[4]); // Don't Duplicate
 
-enrollments[]
-
 gradeStudent = function(o) {
     let studentGrade = {student: students.filter((v) => v.name == o.stn)[0]
         , grade: o.grade
