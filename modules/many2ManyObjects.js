@@ -7,6 +7,8 @@ db.students = Object.create(null);
 db.courses = Object.create(null);
 db.enrollments = Object.create(null);
 
+var dbJSON = '';
+
 var st = {};
 var cs = {};
 var er = {};
@@ -52,7 +54,7 @@ class Student {
 
     set name(name) {
         this._name = name;
-        db.students[this.id].name = name;
+        db.students[this.id] = this;
     };
 
     get name() {
@@ -95,6 +97,7 @@ class Course {
             : 'Not Set';
         courses.push(this);
         db.courses[this.id] = this;
+
     };
 
     get id() {
@@ -103,6 +106,7 @@ class Course {
 
     set name(name) {
         this._name = name;
+        db.courses[this.id] = this;
     };
 
     get name() {
@@ -163,6 +167,7 @@ class Enrollment {
 
     set grade(g) {
         this._grade = g;
+        db.enrollments[this.id] = this;
     };
 
     get grade() {
@@ -225,6 +230,8 @@ let studentGrade = {
 };
 
 gradeStudent(studentGrade);
+
+dbJSON = JSON.stringify(db);
 
 students.map(function (i, n, a) {
     for (pn in i) {
