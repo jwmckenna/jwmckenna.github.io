@@ -231,7 +231,10 @@ let studentGrade = {
 
 gradeStudent(studentGrade);
 
+
 dbJSON = JSON.stringify(db);
+document.writeln(dbJSON);
+var dbUnJSON = JSON.parse(dbJSON);
 
 students.map(function (i, n, a) {
     for (pn in i) {
