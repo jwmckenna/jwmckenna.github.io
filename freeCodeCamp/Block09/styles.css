@@ -25,6 +25,10 @@ h2 {
   border-bottom: 4px solid #dfdfe2;
 }
 
+h3::before {
+  content: "Question #"
+}
+
 #logo {
   width: max(10rem, 18wv);
 }
